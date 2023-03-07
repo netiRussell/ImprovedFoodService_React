@@ -44,6 +44,7 @@ function App() {
   const [cartState, cartStateDispatch] = useReducer(cartReducer, { cartItems: [], isShown: false });
   const [allItems, setAllItems] = useState([]);
   const [fetchingError, setFetchingError] = useState(false);
+  const [loadingData, setLoadingData] = useState(true);
 
   const fetchData = useCallback(async function () {
     try {
@@ -67,6 +68,7 @@ function App() {
         }
       }
       setAllItems(data);
+      setLoadingData(false);
     } catch (error) {
       setFetchingError(error.message);
     }
@@ -81,7 +83,7 @@ function App() {
       <CartContext.Provider value={{ cartItems: cartState.cartItems, isShown: cartState.isShown, cartStateDispatch: cartStateDispatch, allItems: allItems, setAllItems: setAllItems }}>
         <Header />
         <AboutUs />
-        <ItemsList fetchingError={fetchingError} />
+        <ItemsList fetchingError={fetchingError} loadingData={loadingData} />
         <Footer />
         {cartState.isShown && ReactDOM.createPortal(<CartModal />, document.querySelector("body"))}
       </CartContext.Provider>

@@ -4,7 +4,7 @@ import CartContext from "../../store/cart-context";
 
 import SingleItem from "./SingleItem/Content/SingleItem";
 
-function ItemsList({ fetchingError }) {
+function ItemsList({ fetchingError, loadingData }) {
   const ctx = useContext(CartContext);
   const [showSection, setShowSection] = useState(false);
 
@@ -16,6 +16,8 @@ function ItemsList({ fetchingError }) {
     <section className={`container ${styles.w_container} ${showSection ? styles.show_w_container : ""}`}>
       {fetchingError ? (
         <p className={styles.error}>{fetchingError}</p>
+      ) : loadingData ? (
+        <p>Loading...</p>
       ) : (
         <ul className={styles.container}>
           {ctx.allItems.map((value) => {
