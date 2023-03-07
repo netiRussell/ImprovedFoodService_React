@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.container_buttons {
+  grid-template-rows: 1fr 1fr;
+  row-gap: 0.5rem;
+  column-gap: 0.5rem;
+}
+
+.input_number {
+  width: 100%;
+}
+
+.button {
+  background-color: var(--lightRed);
+  font-size: 0.7rem;
+  padding: 0.25rem 0.75rem;
+  color: var(--white);
+}
+
+.button:hover {
+  background-color: var(--lightRedHover);
+}

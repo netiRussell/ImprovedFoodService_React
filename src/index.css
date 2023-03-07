@@ -1,0 +1,85 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --white: #f2f2f2;
+  --whiteHover: #e4dfdf;
+  --black: #2a2827;
+  --darkRed: #e0573f;
+  --darkRedHover: #ce462e;
+  --lightRed: #fb8c73;
+  --lightRedHover: #ec846c;
+}
+
+body {
+  background-color: #fb8c73;
+  padding-bottom: 4rem;
+  position: relative;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+footer {
+  height: 4rem;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+button,
+label,
+input,
+span {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serifs;
+  color: var(--black);
+}
+
+input {
+  padding: 0.15rem 0.5rem;
+  box-sizing: border-box;
+}
+
+.hidden {
+  display: none;
+}
+
+.invalid_input {
+  background-color: #f7cbcb;
+}
+
+.container {
+  max-width: 950px;
+  margin: 3rem auto;
+  display: grid;
+  gap: 1rem;
+}
+
+.button {
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.line {
+  color: var(--black);
+  background-color: var(--black);
+  border: 1px solid var(--black);
+  height: 0;
+}
+
+.name {
+  font-size: 1.25rem;
+}
+
+.price {
+  color: var(--darkRed);
+}
+
+.item_info {
+  display: grid;
+  row-gap: 0.25rem;
+}

@@ -1,0 +1,13 @@
+.title {
+  text-align: center;
+}
+
+.line {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.description {
+  text-align: justify;
+  line-height: 1.5;
+}

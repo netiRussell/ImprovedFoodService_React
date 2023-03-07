@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.25rem;
+  width: 25%;
+}
+
+.input_text {
+  width: 100%;
+}
+
+.amount {
+  display: flex;
+  column-gap: 0.5rem;
+}
+
+.submit {
+  background-color: var(--darkRed);
+  color: var(--white);
+  box-sizing: border-box;
+  padding: 0.4rem 1.25rem;
+}
+
+.submit:hover {
+  background-color: var(--darkRedHover);
+}
+
+.icon {
+  font-size: 0.75rem;
+}
