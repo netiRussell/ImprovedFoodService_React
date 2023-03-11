@@ -20,7 +20,7 @@ function CartModal() {
 
   return (
     <React.Fragment>
-      <form className={`${styles.modal} ${confirmIsOpen ? styles.modal_shifted : ""}`} onSubmit={shiftModal}>
+      <form className={`${styles.modal} ${styles.wrapper_gap} ${confirmIsOpen ? styles.modal_shifted : ""}`} onSubmit={shiftModal}>
         {ctx.cartItems.length > 0 ? (
           ctx.cartItems.map((value) => {
             totalAmount += value.price * value.amount;

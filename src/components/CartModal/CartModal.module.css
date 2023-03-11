@@ -10,10 +10,12 @@
   width: 60%;
   height: fit-content;
   overflow: hidden;
-  display: flex;
+  transition: 0.5s all;
+}
+
+.wrapper_gap {
   display: grid;
   row-gap: 1.25rem;
-  transition: 0.5s all;
 }
 
 .modal_shifted {
