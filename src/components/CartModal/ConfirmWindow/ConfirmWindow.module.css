@@ -3,7 +3,7 @@
 }
 
 .wrapper {
-  width: 70%;
+  width: 80%;
   margin: 0 auto;
 }
 
@@ -13,8 +13,20 @@
   align-items: center;
 }
 
+.label p {
+  flex-shrink: 0;
+}
+
 .input_text {
   width: 100%;
+}
+
+.input_incorrect {
+  background-color: var(--lightRed);
+}
+
+.text_incorrect {
+  color: var(--lightRed);
 }
 
 .call_me {

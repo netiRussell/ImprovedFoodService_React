@@ -1,6 +1,8 @@
 import React, { useReducer, useState, useEffect, useCallback } from "react";
 import ReactDOM from "react-dom";
+
 import CartContext from "./store/cart-context";
+import ConfirmFormContext from "./store/confirmForm-context";
 
 import Header from "./components/Header/Header";
 import AboutUs from "./components/AboutUs/AboutUs";
@@ -46,6 +48,10 @@ function App() {
   const [fetchingError, setFetchingError] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
 
+  const [nameConfirmForm, setNameConfirmForm] = useState("");
+  const [phoneConfirmForm, setPhoneConfirmForm] = useState("");
+  const [callMeConfirmForm, setCallMeConfirmForm] = useState("0");
+
   const fetchData = useCallback(async function () {
     try {
       const request = await fetch("https://foodservice-905ba-default-rtdb.firebaseio.com/meals.json").then((request) => {
@@ -85,7 +91,22 @@ function App() {
         <AboutUs />
         <ItemsList fetchingError={fetchingError} loadingData={loadingData} />
         <Footer />
-        {cartState.isShown && ReactDOM.createPortal(<CartModal />, document.querySelector("body"))}
+        {cartState.isShown &&
+          ReactDOM.createPortal(
+            <ConfirmFormContext.Provider
+              value={{
+                nameConfirmForm: nameConfirmForm,
+                setNameConfirmForm: setNameConfirmForm,
+                phoneConfirmForm: phoneConfirmForm,
+                setPhoneConfirmForm: setPhoneConfirmForm,
+                callMeConfirmForm: callMeConfirmForm,
+                setCallMeConfirmForm: setCallMeConfirmForm,
+              }}
+            >
+              <CartModal />
+            </ConfirmFormContext.Provider>,
+            document.querySelector("body")
+          )}
       </CartContext.Provider>
     </React.Fragment>
   );

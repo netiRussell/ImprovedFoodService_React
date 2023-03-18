@@ -14,8 +14,9 @@ function CartModal() {
 
   const shiftModal = function (event) {
     event.preventDefault();
-    console.log(totalAmount > 0);
-    setConfirmIsOpen(true);
+    if (totalAmount > 0) {
+      setConfirmIsOpen(true);
+    }
   };
 
   return (
