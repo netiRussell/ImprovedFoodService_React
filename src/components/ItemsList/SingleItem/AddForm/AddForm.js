@@ -16,8 +16,6 @@ function AddForm({ id, defaultAmount }) {
     event.preventDefault();
     const amount = amountState;
 
-    // Two problems:
-    // 1 - debouncing is not working
     if (checkValidity(amount)) {
       ctx.setAllItems((prevValue) =>
         prevValue.map((value) => {
@@ -25,6 +23,7 @@ function AddForm({ id, defaultAmount }) {
             value.status = "cart";
             const newValue = value;
             newValue.amount = amount;
+            ctx.setOrderStatus(false);
             ctx.cartStateDispatch({ type: "ADD_TO_CART", item: newValue });
           }
 

@@ -5,6 +5,8 @@ const CartContext = React.createContext({
   isShown: false,
   allItems: [],
   setAllItems: () => {},
+  orderStatus: false,
+  setOrderStatus: () => {},
 });
 
 export default CartContext;

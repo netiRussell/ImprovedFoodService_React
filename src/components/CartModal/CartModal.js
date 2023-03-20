@@ -22,7 +22,13 @@ function CartModal() {
   return (
     <React.Fragment>
       <form className={`${styles.modal} ${styles.wrapper_gap} ${confirmIsOpen ? styles.modal_shifted : ""}`} onSubmit={shiftModal}>
-        {ctx.cartItems.length > 0 ? (
+        {ctx.orderStatus ? (
+          <p className={styles.statusCart_text}>
+            {ctx.orderStatus}
+            {/* This span is meant to help other developers when going through the code */}
+            <span style={{ display: "block" }}>(Developer feature: existing orders are logged out to the console.)</span>
+          </p>
+        ) : ctx.cartItems.length > 0 ? (
           ctx.cartItems.map((value) => {
             totalAmount += value.price * value.amount;
             return <SingleItem key={value.id} id={value.id} name={value.name} price={value.price} defaultAmount={value.amount} cartStateDispatch={ctx.cartStateDispatch} setAllItems={ctx.setAllItems} />;

@@ -1,35 +1,90 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useCallback } from "react";
 
 import stylesLocal from "./ConfirmWindow.module.css";
 import stylesGlobal from "../CartModal.module.css";
 
 import ConfirmFormContext from "../../../store/confirmForm-context";
+import CartContext from "../../../store/cart-context";
 
 function ConfirmWindow({ setConfirmIsOpen, totalAmount }) {
-  const shiftBack = function () {
-    setConfirmIsOpen(false);
-    setIsShifted(false);
-  };
-
   const [isShifted, setIsShifted] = useState(false);
-
   const [nameIncorrect, setNameIncorrect] = useState(false);
   const [phoneIncorrect, setPhoneIncorrect] = useState(false);
 
-  const context = useContext(ConfirmFormContext);
+  const contextForm = useContext(ConfirmFormContext);
+  const nameValue = contextForm.nameConfirmForm;
+  const phoneValue = contextForm.phoneConfirmForm;
+  const callMeValue = contextForm.callMeConfirmForm;
+
+  const contextCart = useContext(CartContext);
 
   useEffect(() => {
     setIsShifted(true);
   }, []);
 
-  const nameValue = context.nameConfirmForm;
-  const phoneValue = context.phoneConfirmForm;
-  const callMeValue = context.callMeConfirmForm;
+  const shiftBack = function () {
+    setConfirmIsOpen(false);
+    setIsShifted(false);
+  };
 
-  const submitOrder = function (event) {
+  const sendData = useCallback(
+    async function () {
+      const dataToSend = { name: nameValue, phoneNumber: phoneValue, callMe: callMeValue, orderData: contextCart.cartItems };
+
+      try {
+        await fetch("https://foodservice-905ba-default-rtdb.firebaseio.com/orders.json", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataToSend),
+        }).then((request) => {
+          if (!request.ok) throw new Error("There was an error: " + request.status);
+
+          return request.json();
+        });
+
+        return false;
+      } catch (error) {
+        return error;
+      }
+    },
+    [callMeValue, nameValue, phoneValue, contextCart.cartItems]
+  );
+
+  const fetchData = useCallback(async function () {
+    try {
+      const request = await fetch("https://foodservice-905ba-default-rtdb.firebaseio.com/orders.json").then((request) => {
+        if (!request.ok) throw new Error("There was an error: " + request.status);
+
+        return request.json();
+      });
+      const data = [];
+
+      for (const element in request) {
+        if (element != null) {
+          data.push({
+            id: element,
+            name: request[element].name,
+            phoneNumber: request[element].phoneNumber,
+            callMe: request[element].callMe,
+            orderData: request[element].orderData,
+          });
+        }
+      }
+
+      return data;
+    } catch (error) {
+      return error;
+    }
+  }, []);
+
+  const submitOrder = async function (event) {
     event.preventDefault();
+    let formIsValid = true;
 
     if (nameValue.trim() === "") {
+      formIsValid = false;
       setNameIncorrect(true);
     }
 
@@ -38,10 +93,35 @@ function ConfirmWindow({ setConfirmIsOpen, totalAmount }) {
     if (phoneValueAdopted.trim() === "" || phoneValueAdopted.length < 10 || phoneValueAdopted.length > 14 || testPattern.test(phoneValueAdopted)) {
       // +1() considered
       setPhoneIncorrect(true);
+      formIsValid = false;
+    }
+
+    if (formIsValid) {
+      // Loading phase
+      shiftBack();
+      contextCart.setOrderStatus("Loading...");
+      const responseIsInvalid = await sendData();
+      console.log(await fetchData());
+
+      // Reseting phase
+      contextCart.cartStateDispatch({ type: "REMOVE_ALL_ITEMS" });
+      contextCart.setAllItems((prevValue) =>
+        prevValue.map((value) => {
+          value.status = "default";
+          value.amount = 1;
+
+          return value;
+        })
+      );
+
+      // Output phase
+      if (responseIsInvalid) {
+        contextCart.setOrderStatus(responseIsInvalid.message);
+        return;
+      }
+      contextCart.setOrderStatus("Thank you! Your order has been placed. Though it doesn't mean you cannot continue shoping with us ;)");
     }
   };
-
-  // ! next step :  send data to DB on submit and have an option to console.log all current orders
 
   return (
     <form className={`${stylesGlobal.modal} ${stylesGlobal.wrapper_gap} ${isShifted ? "" : stylesLocal.modal_invisible}`} onSubmit={submitOrder}>
@@ -55,7 +135,7 @@ function ConfirmWindow({ setConfirmIsOpen, totalAmount }) {
             value={nameValue}
             onChange={(event) => {
               setNameIncorrect(false);
-              context.setNameConfirmForm(event.target.value);
+              contextForm.setNameConfirmForm(event.target.value);
             }}
             required
           />
@@ -70,7 +150,7 @@ function ConfirmWindow({ setConfirmIsOpen, totalAmount }) {
             value={phoneValue}
             onChange={(event) => {
               setPhoneIncorrect(false);
-              context.setPhoneConfirmForm(event.target.value);
+              contextForm.setPhoneConfirmForm(event.target.value);
             }}
             required
           />
@@ -85,7 +165,7 @@ function ConfirmWindow({ setConfirmIsOpen, totalAmount }) {
               value="1"
               checked={callMeValue === "1"}
               onChange={(event) => {
-                context.setCallMeConfirmForm(event.target.value);
+                contextForm.setCallMeConfirmForm(event.target.value);
               }}
               required
             />{" "}
@@ -98,7 +178,7 @@ function ConfirmWindow({ setConfirmIsOpen, totalAmount }) {
               value="0"
               checked={callMeValue === "0"}
               onChange={(event) => {
-                context.setCallMeConfirmForm(event.target.value);
+                contextForm.setCallMeConfirmForm(event.target.value);
               }}
               required
             />{" "}

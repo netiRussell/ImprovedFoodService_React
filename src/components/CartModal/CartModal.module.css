@@ -46,6 +46,11 @@
   text-transform: capitalize;
 }
 
+.statusCart_text {
+  font-weight: 700;
+  text-align: center;
+}
+
 .line {
   width: 100%;
 }

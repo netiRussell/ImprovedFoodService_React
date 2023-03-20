@@ -32,6 +32,11 @@ const cartReducer = function (prevValue, dispatchedValue) {
         }),
         isShown: prevValue.isShown,
       };
+    case "REMOVE_ALL_ITEMS":
+      return {
+        cartItems: [],
+        isShown: prevValue.isShown,
+      };
     default:
       return { cartItems: prevValue.cartItems, isShown: prevValue.isShown };
   }
@@ -47,6 +52,8 @@ function App() {
   const [allItems, setAllItems] = useState([]);
   const [fetchingError, setFetchingError] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
+
+  const [orderStatus, setOrderStatus] = useState(false);
 
   const [nameConfirmForm, setNameConfirmForm] = useState("");
   const [phoneConfirmForm, setPhoneConfirmForm] = useState("");
@@ -86,7 +93,7 @@ function App() {
 
   return (
     <React.Fragment>
-      <CartContext.Provider value={{ cartItems: cartState.cartItems, isShown: cartState.isShown, cartStateDispatch: cartStateDispatch, allItems: allItems, setAllItems: setAllItems }}>
+      <CartContext.Provider value={{ cartItems: cartState.cartItems, isShown: cartState.isShown, cartStateDispatch: cartStateDispatch, allItems: allItems, setAllItems: setAllItems, orderStatus: orderStatus, setOrderStatus: setOrderStatus }}>
         <Header />
         <AboutUs />
         <ItemsList fetchingError={fetchingError} loadingData={loadingData} />
