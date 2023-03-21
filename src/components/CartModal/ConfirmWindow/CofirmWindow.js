@@ -107,8 +107,10 @@ function ConfirmWindow({ setConfirmIsOpen, totalAmount }) {
       contextCart.cartStateDispatch({ type: "REMOVE_ALL_ITEMS" });
       contextCart.setAllItems((prevValue) =>
         prevValue.map((value) => {
-          value.status = "default";
-          value.amount = 1;
+          if (value.status === "cart") {
+            value.status = "default";
+            value.amount = 1;
+          }
 
           return value;
         })
